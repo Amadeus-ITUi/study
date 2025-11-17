@@ -66,6 +66,22 @@ class DecayingEpsilonGreedy(Solver):
         r = self.bandit.step(k)
         self.estimates[k] += 1.0 / (self.counts[k]+1) * (r - self.estimates[k])
         return k
+    
+class UCB(Solver):
+    def  __init__(self, bandit, coef, init_prob=1.0):
+        super(UCB, self).__init__(bandit)
+        self.total_count = 0
+        self.estimates = np.array([init_prob] * self.bandit.k)
+        self.coef = coef
+
+    def run_one_step(self):
+        self.total_count += 1
+        ucb = self.estimates + self.coef *np.sqrt(np.log(self.total_count) / (2 * (self.counts + 1)))
+        k = np.argmax(ucb)
+        r = self.bandit.step(k)
+        self.estimates[k] += 1.0 / (self.counts[k]+1) * (r - self.estimates[k])
+        return k
+
 
 def plot_results(solvers, solver_names):
     for idx, solver in enumerate(solvers):
@@ -88,8 +104,15 @@ bandit_10_arm = BernoulliBandit(K)
 #     solver.run(6000)
 # plot_results(epsilon_greedy_solver_list, epsilon_greedy_solver_names)
 
-decaying_epsilon_greedy_solver = DecayingEpsilonGreedy(bandit_10_arm)
-decaying_epsilon_greedy_solver.run(50000)
+# decaying_epsilon_greedy_solver = DecayingEpsilonGreedy(bandit_10_arm)
+# decaying_epsilon_greedy_solver.run(50000)
+# print(bandit_10_arm.probs)
+# print(decaying_epsilon_greedy_solver.estimates)
+# plot_results([decaying_epsilon_greedy_solver], ['Decaying Epsilon-Greedy'])
+
+coef = 1
+UCB_solver = UCB(bandit_10_arm, coef=coef)
+UCB_solver.run(500)
 print(bandit_10_arm.probs)
-print(decaying_epsilon_greedy_solver.estimates)
-plot_results([decaying_epsilon_greedy_solver], ['Decaying Epsilon-Greedy'])
+print(UCB_solver.estimates)
+plot_results([UCB_solver], ['UCB, coef={}'.format(coef)])
