@@ -81,6 +81,20 @@ class UCB(Solver):
         r = self.bandit.step(k)
         self.estimates[k] += 1.0 / (self.counts[k]+1) * (r - self.estimates[k])
         return k
+    
+class ThompsonSampling(Solver):
+    def __init__(self, bandit):
+        super(ThompsonSampling, self).__init__(bandit)
+        self._a = np.ones(self.bandit.k)
+        self._b = np.ones(self.bandit.k)
+    
+    def run_one_step(self):
+        samples = np.random.beta(self._a, self._b)
+        k = np.argmax(samples)
+        r = self.bandit.step(k)
+        self._a[k] += r
+        self._b[k] += 1 - r
+        return k
 
 
 def plot_results(solvers, solver_names):
@@ -110,9 +124,15 @@ bandit_10_arm = BernoulliBandit(K)
 # print(decaying_epsilon_greedy_solver.estimates)
 # plot_results([decaying_epsilon_greedy_solver], ['Decaying Epsilon-Greedy'])
 
-coef = 1
-UCB_solver = UCB(bandit_10_arm, coef=coef)
-UCB_solver.run(500)
+# coef = 1
+# UCB_solver = UCB(bandit_10_arm, coef=coef)
+# UCB_solver.run(500)
+# print(bandit_10_arm.probs)
+# print(UCB_solver.estimates)
+# plot_results([UCB_solver], ['UCB, coef={}'.format(coef)])
+
+thompson_sampling_solver = ThompsonSampling(bandit_10_arm)
+thompson_sampling_solver.run(50000)
 print(bandit_10_arm.probs)
-print(UCB_solver.estimates)
-plot_results([UCB_solver], ['UCB, coef={}'.format(coef)])
+print(thompson_sampling_solver._a / (thompson_sampling_solver._a + thompson_sampling_solver._b))
+plot_results([thompson_sampling_solver], ['Thompson Sampling'])
