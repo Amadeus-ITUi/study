@@ -111,28 +111,28 @@ np.random.seed(1)
 K = 10
 bandit_10_arm = BernoulliBandit(K)
 
-# epsilons = [1e-4, 0.01, 0.1, 0.25, 0.5]
-# epsilon_greedy_solver_list = [ EpsilonGreedy(bandit_10_arm, epsilon=e) for e in epsilons ]
-# epsilon_greedy_solver_names = ["epsilon={}".format(e) for e in epsilons]
-# for solver in epsilon_greedy_solver_list:
-#     solver.run(6000)
-# plot_results(epsilon_greedy_solver_list, epsilon_greedy_solver_names)
+epsilons = [1e-4, 0.01, 0.1, 0.25, 0.5]
+epsilon_greedy_solver_list = [ EpsilonGreedy(bandit_10_arm, epsilon=e) for e in epsilons ]
+epsilon_greedy_solver_names = ["epsilon={}".format(e) for e in epsilons]
+for solver in epsilon_greedy_solver_list:
+    solver.run(5000)
+plot_results(epsilon_greedy_solver_list, epsilon_greedy_solver_names)
 
-# decaying_epsilon_greedy_solver = DecayingEpsilonGreedy(bandit_10_arm)
-# decaying_epsilon_greedy_solver.run(50000)
-# print(bandit_10_arm.probs)
-# print(decaying_epsilon_greedy_solver.estimates)
-# plot_results([decaying_epsilon_greedy_solver], ['Decaying Epsilon-Greedy'])
+decaying_epsilon_greedy_solver = DecayingEpsilonGreedy(bandit_10_arm)
+decaying_epsilon_greedy_solver.run(5000)
+print(bandit_10_arm.probs)
+print(decaying_epsilon_greedy_solver.estimates)
+plot_results([decaying_epsilon_greedy_solver], ['Decaying Epsilon-Greedy'])
 
-# coef = 1
-# UCB_solver = UCB(bandit_10_arm, coef=coef)
-# UCB_solver.run(500)
-# print(bandit_10_arm.probs)
-# print(UCB_solver.estimates)
-# plot_results([UCB_solver], ['UCB, coef={}'.format(coef)])
+coef = 1
+UCB_solver = UCB(bandit_10_arm, coef=coef)
+UCB_solver.run(5000)
+print(bandit_10_arm.probs)
+print(UCB_solver.estimates)
+plot_results([UCB_solver], ['UCB, coef={}'.format(coef)])
 
 thompson_sampling_solver = ThompsonSampling(bandit_10_arm)
-thompson_sampling_solver.run(50000)
+thompson_sampling_solver.run(5000)
 print(bandit_10_arm.probs)
 print(thompson_sampling_solver._a / (thompson_sampling_solver._a + thompson_sampling_solver._b))
 plot_results([thompson_sampling_solver], ['Thompson Sampling'])
