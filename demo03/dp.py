@@ -146,30 +146,30 @@ def print_agent(agent, action_meaning, disaster=[], end=[]):
                 print(pi_str, end=' ')
         print()
 
+if __name__ == "__main__":
+    # P = CliffWalkingEnv().P
+    # for s in range(48):
+    #     for a in range(4):
+    #         if P[s][a][0][2] == -100:
+    #             print(P[s][a])
 
-# P = CliffWalkingEnv().P
-# for s in range(48):
-#     for a in range(4):
-#         if P[s][a][0][2] == -100:
-#             print(P[s][a])
+    # env = CliffWalkingEnv()
+    # action_meaning = ['^', 'v', '<', '>']
+    # theta = 0.001
+    # gamma = 0.9
+    # agent = PolicyIteration(env, theta, gamma)
+    # agent.policy_iteration()
+    # print_agent(agent, action_meaning, disaster=range(37,47), end=[47])
 
-# env = CliffWalkingEnv()
-# action_meaning = ['^', 'v', '<', '>']
-# theta = 0.001
-# gamma = 0.9
-# agent = PolicyIteration(env, theta, gamma)
-# agent.policy_iteration()
-# print_agent(agent, action_meaning, disaster=range(37,47), end=[47])
+    # env = CliffWalkingEnv()
+    # agent = PolicyIteration(env, theta=0.001, gamma=0.9)
+    # agent.policy_evaluation()
+    # agent.policy_improvement()
 
-# env = CliffWalkingEnv()
-# agent = PolicyIteration(env, theta=0.001, gamma=0.9)
-# agent.policy_evaluation()
-# agent.policy_improvement()
-
-env = CliffWalkingEnv()
-action_meaning = ['^', 'v', '<', '>']
-theta = 0.001
-gamma = 0.9
-agent = ValueIteration(env, theta, gamma)
-agent.value_iteration()
-print_agent(agent, action_meaning, disaster=range(37,47), end=[47])
+    env = CliffWalkingEnv()
+    action_meaning = ['^', 'v', '<', '>']
+    theta = 0.001
+    gamma = 0.9
+    agent = ValueIteration(env, theta, gamma)
+    agent.value_iteration()
+    print_agent(agent, action_meaning, disaster=range(37,47), end=[47])
